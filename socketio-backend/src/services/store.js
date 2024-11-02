@@ -4,8 +4,12 @@ export const state = {
   gameStartTime: null,
   controlPoints: [],
   respawnPoints: [],
+  scores: {
+    ["Scientists"]: 0,
+    ["Marine Corps"]: 0,
+  },
 };
 
 export const internal = {
-  gameLoopUnsub: null,
+  gameLoopInterval: null,
 };

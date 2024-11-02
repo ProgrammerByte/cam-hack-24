@@ -1,7 +1,7 @@
 import { broadcastState, io } from "../services/io.js";
 import { connectionMiddleware } from "./socket_middleware.js";
 import { internal, state } from "../services/store.js";
-import { findMostLikelyShot } from "../utils.js";
+import { findMostLikelyShot, findNear } from "../utils.js";
 
 function popPlayer(playerName) {
   const player = state.players.find(
@@ -20,21 +20,45 @@ export function initSocketServer() {
     broadcastState();
 
     socket.on("startGame", async () => {
-      if (!socket.data.isAdmin) return;
+      if (!socket.data.isAdmin || state.gameInProgress) return;
 
       for (const player of state.players) {
         if (!player.team) continue;
         player.health = 100;
       }
+
       state.gameInProgress = true;
       state.gameStartTime = Date.now();
+      state.scores = {
+        ["Scientists"]: 0,
+        ["Marine Corps"]: 0,
+      };
 
-      internal.gameLoopUnsub = setInterval(() => {
+      const timeDelta = 0.05;
+
+      internal.gameLoopInterval = setInterval(() => {
         // Game loop
-        // TODO: Implement game loop
-      }, 50);
+        for (const player of state.players) {
+          if (!player.team) continue;
+
+          // Regenerate health
+          const points = findNear(player, state.respawnPoints).filter(
+            (p) => p.team === player.team
+          );
+          if (points.length > 0) {
+            player.health = Math.min(100, player.health + 20 * timeDelta);
+          }
+
+          // Control point
+          const controlPoints = findNear(player, state.controlPoints);
+          if (controlPoints.length > 0) {
+            state.scores[player.team] += timeDelta;
+          }
+        }
+      }, timeDelta * 1000);
 
       console.info("Game started.");
+      broadcastState();
     });
 
     socket.on("endGame", async () => {
@@ -43,30 +67,37 @@ export function initSocketServer() {
       state.gameInProgress = false;
       state.gameStartTime = null;
       console.info("Game ended.");
+
+      clearInterval(internal.gameLoopInterval);
+      broadcastState();
     });
 
     socket.on("addControlPoint", async (position) => {
       if (!socket.data.isAdmin) return;
 
-      state.controlPoints.push(position);
+      state.controlPoints.push({ position });
+      broadcastState();
     });
 
     socket.on("removeControlPoint", async (index) => {
       if (!socket.data.isAdmin) return;
 
       state.controlPoints.splice(index, 1);
+      broadcastState();
     });
 
     socket.on("addRespawnPoint", async (position, team) => {
       if (!socket.data.isAdmin) return;
 
       state.respawnPoints.push({ position, team });
+      broadcastState();
     });
 
     socket.on("removeRespawnPoint", async (index) => {
       if (!socket.data.isAdmin) return;
 
       state.respawnPoints.splice(index, 1);
+      broadcastState();
     });
 
     socket.on("kickPlayer", async (playerName) => {
@@ -75,6 +106,7 @@ export function initSocketServer() {
 
       const playerSocket = io.sockets.sockets.get(player.socketId);
       playerSocket?.disconnect();
+      broadcastState();
     });
 
     socket.on("assignTeam", async (playerName, team) => {
@@ -83,6 +115,7 @@ export function initSocketServer() {
         (player) => player.playerName === playerName
       );
       player.team = team;
+      broadcastState();
     });
 
     socket.on("shoot", async () => {
@@ -96,6 +129,7 @@ export function initSocketServer() {
       if (target) {
         target.health = Math.max(0, target.health - 10);
       }
+      broadcastState();
     });
 
     socket.on("setPosAndHeading", async (playerName, position, heading) => {
@@ -105,6 +139,7 @@ export function initSocketServer() {
       player.position = position;
       player.heading = heading;
       player.positionLastUpdated = Date.now();
+      broadcastState();
     });
 
     socket.on("disconnect", async (reason) => {
@@ -134,6 +169,7 @@ export function initSocketServer() {
           console.info(`${playerName} lost connection.`);
         }
       }
+      broadcastState();
     });
   });
 }

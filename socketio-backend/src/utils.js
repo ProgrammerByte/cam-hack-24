@@ -45,3 +45,55 @@ export function findMostLikelyShot(shooter) {
 
   return mostLikelyShot;
 }
+
+export function findNear(obj, objs) {
+  const radius = 10;
+
+  return objs.filter(
+    (other) => Math.hypot(obj.x - other.x, obj.y - other.y) < radius
+  );
+}
+
+export function generateFunnyName() {
+  const adjectives = [
+    "Silly",
+    "Spooky",
+    "Scary",
+    "Wobbly",
+    "Chunky",
+    "Rusty",
+    "Jumpy",
+    "Sneaky",
+    "Quirky",
+    "Sassy",
+    "Gloomy",
+    "Clumsy",
+    "Fluffy",
+    "Snazzy",
+    "Goofy",
+  ];
+
+  const nouns = [
+    "Headcrab",
+    "Crowbar",
+    "Combine",
+    "G-Man",
+    "Scientist",
+    "Vortigaunt",
+    "Barnacle",
+    "Zombie",
+    "Portal",
+    "Lambda",
+    "Strider",
+    "Ravenholm",
+    "Alyx",
+    "Antlion",
+    "Gargantua",
+  ];
+
+  // Pick a random adjective and noun
+  const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+  const noun = nouns[Math.floor(Math.random() * nouns.length)];
+
+  return `${adjective}${noun}`;
+}
