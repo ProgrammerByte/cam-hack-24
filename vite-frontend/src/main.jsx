@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Root from "./routes/root";
 import RoomPage from "./routes/desktop/roomPage";
+import ActivePage from "./routes/mobile/activePage";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/desktop/room",
     element: <RoomPage />,
+  },
+  {
+    path: "/mobile/active",
+    element: <ActivePage />,
   },
 ]);
 
