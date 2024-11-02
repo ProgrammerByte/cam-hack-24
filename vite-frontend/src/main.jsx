@@ -5,6 +5,7 @@ import "./index.css";
 import Root from "./routes/root";
 import RoomPage from "./routes/desktop/roomPage";
 import ActivePage from "./routes/mobile/activePage";
+import WaitingPage from "./routes/mobile/waitingPage";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/mobile/active",
     element: <ActivePage />,
+  },
+  {
+    path: "/mobile/waiting",
+    element: <WaitingPage />,
   },
 ]);
 

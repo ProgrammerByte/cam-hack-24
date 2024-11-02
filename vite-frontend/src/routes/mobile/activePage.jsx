@@ -1,10 +1,17 @@
 import cv, { matFromImageData } from "@techstark/opencv-js";
 import { useEffect, useRef, useState } from "react";
+import gunshotSound from "/src/assets/gunshot.mp3";
 
 const ActivePage = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const gunshotAudio = new Audio(gunshotSound);
   const [opencvReady, setOpencvReady] = useState(false);
+
+  const playGunshotSound = () => {
+    gunshotAudio.currentTime = 0; // Reset to start in case it was already playing
+    gunshotAudio.play();
+  };
 
   useEffect(() => {
     if (cv && cv.Mat) {
@@ -75,10 +82,21 @@ const ActivePage = () => {
         muted // Ensure it's muted to prevent feedback
         className="w-full h-full object-cover"
       />
-      <canvas ref={canvasRef} className="hidden" />{" "}
       {/* Hidden canvas for capturing frame */}
+      <canvas ref={canvasRef} className="hidden" />{" "}
+      {/* Crosshair SVG positioned at the center */}
+      <img
+        src="/src/assets/crosshair.svg"
+        alt="Crosshair"
+        className="absolute inset-0 m-auto w-16 h-16 pointer-events-none"
+        style={{
+          filter:
+            "invert(82%) sepia(97%) saturate(7492%) hue-rotate(333deg) brightness(100%) contrast(102%)",
+        }}
+      />
       <button
         onClick={() => {
+          playGunshotSound();
           const frameMat = captureFrame();
           if (frameMat) {
             console.log("Captured frame as cv.Mat:", frameMat);
