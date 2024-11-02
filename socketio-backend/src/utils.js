@@ -95,5 +95,11 @@ export function generateFunnyName() {
   const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
   const noun = nouns[Math.floor(Math.random() * nouns.length)];
 
-  return `${adjective}${noun}`;
+  const name = `${adjective}${noun}`;
+
+  if (state.players.some((player) => player.playerName === name)) {
+    return generateFunnyName();
+  }
+
+  return name;
 }
