@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { SocketContext } from "../context/socketContext";
+
 const RoomPage = () => {
   const users = [
     { id: 1, name: "Alice", team: "scientist" },
@@ -11,12 +14,17 @@ const RoomPage = () => {
     (user) => user.team !== "scientist" && user.team !== "soldier"
   );
   console.log(unassigned);
+  const socket = useContext(SocketContext);
 
   const roomInfo = {
     title: "Demo Room",
     description: "This is the official Demo Room for HLIRL",
     createdAt: "November 3, 2024",
     createdBy: "Admin",
+  };
+
+  const startGame = () => {
+    socket.emit("startGame");
   };
 
   return (
@@ -127,7 +135,10 @@ const RoomPage = () => {
           </h2>
         </div>
         <div>
-          <button className="bg-blue-500 text-white rounded-lg p-2 mt-4 hover:bg-blue-600 transition duration-200">
+          <button
+            className="bg-blue-500 text-white rounded-lg p-2 mt-4 hover:bg-blue-600 transition duration-200"
+            onClick={startGame}
+          >
             Begin Match
           </button>
         </div>
