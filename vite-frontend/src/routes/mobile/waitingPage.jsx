@@ -1,4 +1,11 @@
+import { useContext, useEffect } from "react";
+import { SocketContext } from "../context/socketContext";
+
 const WaitingPage = () => {
+  const socket = useContext(SocketContext);
+  useEffect(() => {
+    console.log(socket);
+  }, [socket]);
   const team = "soldier"; // scientist / soldier / unassigned
 
   const teamNames = {

@@ -8,6 +8,7 @@ import ActivePage from "./routes/mobile/activePage";
 import WaitingPage from "./routes/mobile/waitingPage";
 import DeathPage from "./routes/mobile/deathPage";
 import SetupPage from "./routes/mobile/setupPage";
+import { SocketProvider } from "./socketProvider";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <SocketProvider>
+      <RouterProvider router={router} />
+    </SocketProvider>
   </React.StrictMode>
 );
