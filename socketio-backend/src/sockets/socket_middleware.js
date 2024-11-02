@@ -26,6 +26,7 @@ async function connectionMiddlewareRaw(socket, next) {
         playerName: generateFunnyName(),
         sessionId: sid,
         connected: true,
+        team: null,
         socketId: socket.id,
       };
       state.players.push(player);
