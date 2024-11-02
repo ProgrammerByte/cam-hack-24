@@ -1,7 +1,7 @@
 import { state } from "../services/store.js";
 import { generateFunnyName } from "../utils.js";
 
-export async function connectionMiddlewareRaw(socket, next) {
+async function connectionMiddlewareRaw(socket, next) {
   const auth = socket.handshake.auth;
   if (auth.token == "beans") {
     socket.data = {
@@ -13,7 +13,7 @@ export async function connectionMiddlewareRaw(socket, next) {
     if (auth.sessionId) {
       // Player reconnecting
       player = state.players.find(
-        (player) => player.seesionId === auth.sessionId
+        (player) => player.sessionId === auth.sessionId
       );
     }
 
