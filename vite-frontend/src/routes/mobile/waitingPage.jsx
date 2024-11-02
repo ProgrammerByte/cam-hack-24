@@ -6,7 +6,11 @@ const WaitingPage = () => {
   useEffect(() => {
     console.log(socket);
   }, [socket]);
-  const team = "soldier"; // scientist / soldier / unassigned
+  const team = "unassigned"; // scientist / soldier / unassigned
+
+  socket.on("sessionData", (data) => {
+    console.log(data);
+  });
 
   const teamNames = {
     scientist: "You are on team Scientist",

@@ -10,13 +10,16 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (!socket) {
-      const s = io(SOCKET_SERVER_URL, {
-        auth: {
-          token: "beans",
-        },
-      });
-      // s.on("sessionData", (d) => console.log("hello", d));
-      // s.emit("startGame");
+      let s;
+      if (window.location.href.includes("/desktop")) {
+        s = io(SOCKET_SERVER_URL, {
+          auth: {
+            token: "beans",
+          },
+        });
+      } else {
+        s = io(SOCKET_SERVER_URL);
+      }
       setSocket(s);
     }
 
