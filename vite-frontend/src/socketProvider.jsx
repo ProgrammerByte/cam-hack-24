@@ -22,11 +22,17 @@ export const SocketProvider = ({ children }) => {
           },
         });
       } else {
-        s = io(SOCKET_SERVER_URL);
+        const sid = localStorage.getItem("sessionId");
+        s = io(SOCKET_SERVER_URL, {
+          auth: sid && {
+            sessionId: sid,
+          },
+        });
       }
       s.on("sessionData", (data) => {
         setSession(data);
         s.auth = { ...(s.auth || {}), sessionId: data.sessionId };
+        localStorage.setItem("sessionId", data.sessionId || "");
       });
       s.on("state", (state) => {
         setState(state);
