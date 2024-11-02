@@ -1,12 +1,13 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SocketContext } from "../context/socketContext";
 
 const RoomPage = () => {
-  const users = [
+  /* const users = [
     { id: 1, name: "Alice", team: "scientist" },
     { id: 2, name: "Bob", team: null },
     { id: 3, name: "Charlie", team: "soldier" },
-  ];
+  ]; */
+  const [users, setUsers] = useState([]);
 
   const scientists = users.filter((user) => user.team === "scientist");
   const soldiers = users.filter((user) => user.team === "soldier");
@@ -26,6 +27,11 @@ const RoomPage = () => {
   const startGame = () => {
     socket.emit("startGame");
   };
+
+  socket.on("state", (state) => {
+    console.log("state", state);
+    setUsers(state.players);
+  });
 
   return (
     <div
@@ -47,7 +53,7 @@ const RoomPage = () => {
                 key={user.id}
                 className="p-2 bg-gray-200 rounded-lg shadow-sm text-gray-700 font-medium z-10"
               >
-                {user.name}
+                {user.playerName}
               </li>
             ))}
           </ul>
@@ -74,7 +80,7 @@ const RoomPage = () => {
                 key={user.id}
                 className="p-2 bg-gray-200 rounded-lg shadow-sm text-gray-700 font-medium"
               >
-                {user.name}
+                {user.playerName}
               </li>
             ))}
           </ul>
@@ -101,7 +107,7 @@ const RoomPage = () => {
                 key={user.id}
                 className="p-2 bg-gray-200 rounded-lg shadow-sm text-gray-700 font-medium z-10"
               >
-                {user.name}
+                {user.playerName}
               </li>
             ))}
           </ul>

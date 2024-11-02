@@ -1,16 +1,17 @@
 import { useContext, useEffect } from "react";
 import { SocketContext } from "../context/socketContext";
+import { SessionContext } from "../context/sessionContext";
 
 const WaitingPage = () => {
   const socket = useContext(SocketContext);
+  const session = useContext(SessionContext);
+
+  console.log("got sess", session);
+
   useEffect(() => {
-    console.log(socket);
+    // console.log(socket);
   }, [socket]);
   const team = "unassigned"; // scientist / soldier / unassigned
-
-  socket.on("sessionData", (data) => {
-    console.log(data);
-  });
 
   const teamNames = {
     scientist: "You are on team Scientist",
@@ -30,7 +31,11 @@ const WaitingPage = () => {
     >
       <div className="hidden bg-blue-500 bg-green-500 bg-red-500" />
       <div className="text-center text-white font-bold">
-        <h1 className="text-3xl font-bold">Waiting</h1>
+        <div className="absolute top-0 w-full text-3xl my-4 left-0">
+          <p>Your name is</p>
+          <p>{session.playerName}</p>
+        </div>
+        <h1 className="text-5xl font-bold">Waiting</h1>
         <p className="text-xl mt-2">{teamNames[team]}</p>
       </div>
     </div>
