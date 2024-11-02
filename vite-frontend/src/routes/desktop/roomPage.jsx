@@ -1,18 +1,14 @@
 import { useContext, useState } from "react";
 import { SocketContext } from "../context/socketContext";
+import PlayerButton from "../../components/playerButton";
 
 const RoomPage = () => {
-  /* const users = [
-    { id: 1, name: "Alice", team: "scientist" },
-    { id: 2, name: "Bob", team: null },
-    { id: 3, name: "Charlie", team: "soldier" },
-  ]; */
   const [users, setUsers] = useState([]);
 
-  const scientists = users.filter((user) => user.team === "scientist");
-  const soldiers = users.filter((user) => user.team === "soldier");
+  const scientists = users.filter((user) => user.team === "Scientists");
+  const soldiers = users.filter((user) => user.team === "Marine Corps");
   const unassigned = users.filter(
-    (user) => user.team !== "scientist" && user.team !== "soldier"
+    (user) => user.team !== "Scientists" && user.team !== "Marine Corps"
   );
   console.log(unassigned);
   const socket = useContext(SocketContext);
@@ -49,12 +45,7 @@ const RoomPage = () => {
           </h2>
           <ul className="space-y-3">
             {scientists.map((user) => (
-              <li
-                key={user.id}
-                className="p-2 bg-gray-200 rounded-lg shadow-sm text-gray-700 font-medium z-10"
-              >
-                {user.playerName}
-              </li>
+              <PlayerButton key={user.playerName} user={user} />
             ))}
           </ul>
           <img
@@ -76,12 +67,7 @@ const RoomPage = () => {
           </h2>
           <ul className="space-y-3">
             {soldiers.map((user) => (
-              <li
-                key={user.id}
-                className="p-2 bg-gray-200 rounded-lg shadow-sm text-gray-700 font-medium"
-              >
-                {user.playerName}
-              </li>
+              <PlayerButton key={user.playerName} user={user} />
             ))}
           </ul>
           <img
@@ -103,12 +89,7 @@ const RoomPage = () => {
           <h2 className="text-lg font-semibold mb-4 text-gray-800">Lobby</h2>
           <ul className="space-y-3">
             {unassigned.map((user) => (
-              <li
-                key={user.id}
-                className="p-2 bg-gray-200 rounded-lg shadow-sm text-gray-700 font-medium z-10"
-              >
-                {user.playerName}
-              </li>
+              <PlayerButton key={user.playerName} user={user} />
             ))}
           </ul>
           <img

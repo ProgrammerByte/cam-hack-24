@@ -1,7 +1,7 @@
 const DeathPage = () => {
-  const team = "scientist"; // scientist / soldier / unassigned
+  const team = "Scientists"; // scientist / soldier / unassigned
   const backgroundName =
-    team === "scientist" ? "scientistdeath.jpg" : "soldierdeath.png";
+    team === "Scientists" ? "scientistdeath.jpg" : "soldierdeath.png";
 
   return (
     <div

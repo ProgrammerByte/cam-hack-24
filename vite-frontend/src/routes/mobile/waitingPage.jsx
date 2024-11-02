@@ -11,19 +11,19 @@ const WaitingPage = () => {
   useEffect(() => {
     // console.log(socket);
   }, [socket]);
-  const team = "unassigned"; // scientist / soldier / unassigned
 
   const teamNames = {
-    scientist: "You are on team Scientist",
-    soldier: "You are on team Marine Corps",
+    Scientists: "You are on team Scientist",
+    "Marine Corps": "You are on team Marine Corps",
     unassigned: "You are yet to be assigned to a team",
   };
 
   const bgs = {
-    scientist: "blue-500",
-    soldier: "green-500",
+    Scientists: "blue-500",
+    "Marine Corps": "green-500",
     unassigned: "red-500",
   };
+  const team = session.team || "unassigned";
 
   return (
     <div
