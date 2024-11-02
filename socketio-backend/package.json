@@ -1,0 +1,9 @@
+{
+  "name": "socketio-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node --watch-path ./src ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
