@@ -1,16 +1,18 @@
-import { useContext, useEffect } from "react";
-import { SocketContext } from "../context/socketContext";
+import { useContext, useEffect, useState } from "react";
 import { SessionContext } from "../context/sessionContext";
+import { StateContext } from "../context/stateContext";
 
 const WaitingPage = () => {
-  const socket = useContext(SocketContext);
   const session = useContext(SessionContext);
-
-  console.log("got sess", session);
+  const state = useContext(StateContext);
+  const [team, setTeam] = useState("unassigned");
 
   useEffect(() => {
-    // console.log(socket);
-  }, [socket]);
+    setTeam(
+      state.players.filter((p) => p.playerName === session.playerName)?.[0]
+        ?.team || "unassigned"
+    );
+  }, [state]);
 
   const teamNames = {
     Scientists: "You are on team Scientist",
@@ -23,7 +25,6 @@ const WaitingPage = () => {
     "Marine Corps": "green-500",
     unassigned: "red-500",
   };
-  const team = session.team || "unassigned";
 
   return (
     <div

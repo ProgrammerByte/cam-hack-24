@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { SocketContext } from "./routes/context/socketContext";
 import { SessionContext } from "./routes/context/sessionContext";
+import { StateContext } from "./routes/context/stateContext";
 
 const SOCKET_SERVER_URL = "http://localhost:8080"; // Change this to your server URL
 
@@ -9,6 +10,7 @@ const SOCKET_SERVER_URL = "http://localhost:8080"; // Change this to your server
 export const SocketProvider = ({ children }) => {
   const [session, setSession] = useState(null);
   const [socket, setSocket] = useState(undefined);
+  const [state, setState] = useState(undefined);
 
   useEffect(() => {
     if (!socket) {
@@ -26,6 +28,9 @@ export const SocketProvider = ({ children }) => {
         setSession(data);
         s.auth = { ...(s.auth || {}), sessionId: data.sessionId };
       });
+      s.on("state", (state) => {
+        setState(state);
+      });
       setSocket(s);
     }
 
@@ -41,8 +46,12 @@ export const SocketProvider = ({ children }) => {
   }
 
   return (
-    <SessionContext.Provider value={session}>
-      <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
-    </SessionContext.Provider>
+    <StateContext.Provider value={state}>
+      <SessionContext.Provider value={session}>
+        <SocketContext.Provider value={socket}>
+          {children}
+        </SocketContext.Provider>
+      </SessionContext.Provider>
+    </StateContext.Provider>
   );
 };
