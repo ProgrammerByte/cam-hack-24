@@ -1,12 +1,19 @@
 import cv, { matFromImageData } from "@techstark/opencv-js";
 import { useEffect, useRef, useState } from "react";
 import gunshotSound from "/src/assets/gunshot.mp3";
+import useTone from "../../hooks/useTone";
 
 const ActivePage = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const gunshotAudio = new Audio(gunshotSound);
   const [opencvReady, setOpencvReady] = useState(false);
+
+  const playTone = useTone();
+
+  const playBlip = () => {
+    playTone(18000, 300);
+  };
 
   const playGunshotSound = () => {
     gunshotAudio.currentTime = 0; // Reset to start in case it was already playing
@@ -97,6 +104,7 @@ const ActivePage = () => {
       <button
         onClick={() => {
           playGunshotSound();
+          playBlip();
           const frameMat = captureFrame();
           if (frameMat) {
             console.log("Captured frame as cv.Mat:", frameMat);
