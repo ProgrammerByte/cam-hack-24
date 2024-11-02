@@ -1,4 +1,4 @@
-import { players } from "../services/store";
+import { state } from "../services/store.js";
 
 function generateFunnyName() {
   const adjectives = [
@@ -51,10 +51,12 @@ export async function connectionMiddlewareRaw(socket, next) {
 
   if (auth.sessionId) {
     // Player reconnecting
-    player = players.find((player) => player.seesionId === auth.sessionId);
+    player = state.players.find(
+      (player) => player.seesionId === auth.sessionId
+    );
 
     if (!player) {
-      throw new ClientError("REJOIN_FAILED", "Failed to rejoin room");
+      throw new Error("REJOIN_FAILED", "Failed to rejoin room");
     }
 
     player.connected = true;
@@ -67,10 +69,13 @@ export async function connectionMiddlewareRaw(socket, next) {
       playerName: generateFunnyName(),
       sessionId: Math.random().toString(36).substring(2, 15),
       team: null,
+      position: null,
+      heading: null,
+      positionLastUpdated: Date.now(),
       connected: true,
       socketId: socket.id,
     };
-    addToRoom(room, player);
+    state.players.push(player);
     console.log("Player joined room", player);
   }
 

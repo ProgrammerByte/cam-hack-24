@@ -1,7 +1,7 @@
-import {} from "../controllers/socket_controllers";
-import { broadcastState, io } from "../services/io";
-import { connectionMiddleware } from "./socket_middleware";
-import { players, state } from "../services/store";
+import { broadcastState, io } from "../services/io.js";
+import { connectionMiddleware } from "./socket_middleware.js";
+import { state } from "../services/store.js";
+import { findMostLikelyShot } from "../utils.js";
 
 function popPlayer(playerName) {
   const player = state.players.find(
@@ -19,12 +19,12 @@ export function initSocketServer() {
   io.on("connection", async (socket) => {
     broadcastState();
 
-    socket.on("startGame", async (gameName) => {
-      // TODO
+    socket.on("startGame", async () => {
+      // TODO: Implement
     });
 
     socket.on("endGame", async () => {
-      // TODO
+      // TODO: Implement
     });
 
     socket.on("kickPlayer", async (playerName) => {
@@ -35,8 +35,33 @@ export function initSocketServer() {
     });
 
     socket.on("assignTeam", async (playerName, team) => {
-      const player = players.find((player) => player.playerName === playerName);
+      const player = state.players.find(
+        (player) => player.playerName === playerName
+      );
       player.team = team;
+    });
+
+    socket.on("shoot", async () => {
+      // TODO: Do blip
+
+      const shooter = players.find((player) => player.socketId === socket.id);
+
+      // Wait for position updates
+      setTimeout(() => {
+        const target = findMostLikelyShot(shooter);
+        if (target) {
+          // TODO: Do hit
+        }
+      }, 500);
+    });
+
+    socket.on("setPosAndHeading", async (playerName, position, heading) => {
+      const player = state.players.find(
+        (player) => player.playerName === playerName
+      );
+      player.position = position;
+      player.heading = heading;
+      player.positionLastUpdated = Date.now();
     });
 
     socket.on("disconnect", async (reason) => {
@@ -54,7 +79,9 @@ export function initSocketServer() {
 
         console.info(`${playerName} left.`);
       } else {
-        const player = players.find((player) => player.socketId === socket.id);
+        const player = state.players.find(
+          (player) => player.socketId === socket.id
+        );
 
         // If no player is found, player must have already reconnected
         if (!player) {

@@ -1,10 +1,10 @@
 import { Server } from "socket.io";
-import { state } from "./store";
+import { state } from "./store.js";
 
 export const io = new Server({
   allowEIO3: true,
   cors: {
-    origin: config.origin,
+    origin: "*",
   },
   pingTimeout: 5000,
   pingInterval: 5000,

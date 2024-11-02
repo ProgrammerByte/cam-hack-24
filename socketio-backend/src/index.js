@@ -1,9 +1,10 @@
 import cors from "cors";
 import { createServer } from "http";
-import { io } from "./services/io";
-import { initSocketServer } from "./sockets/socket_server";
+import express from "express";
+import { io } from "./services/io.js";
+import { initSocketServer } from "./sockets/socket_server.js";
 
-PORT = 8080;
+const PORT = 8080;
 
 // Catch unhandled promise rejection errors
 process.on("unhandledRejection", (reason, promise) => {
@@ -27,7 +28,7 @@ async function start() {
   initSocketServer();
   io.attach(server);
 
-  server.listen(PORT, () => [logger.info(`Listening on port ${PORT}`)]);
+  server.listen(PORT, () => [console.info(`Listening on port ${PORT}`)]);
 }
 
 start().catch((reason) => {
