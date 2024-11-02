@@ -1,6 +1,6 @@
 import { broadcastState, io } from "../services/io.js";
 import { connectionMiddleware } from "./socket_middleware.js";
-import { state } from "../services/store.js";
+import { internal, state } from "../services/store.js";
 import { findMostLikelyShot } from "../utils.js";
 
 function popPlayer(playerName) {
@@ -20,14 +20,57 @@ export function initSocketServer() {
     broadcastState();
 
     socket.on("startGame", async () => {
-      // TODO: Implement
+      if (!socket.data.isAdmin) return;
+
+      for (const player of state.players) {
+        if (!player.team) continue;
+        player.health = 100;
+      }
+      state.gameInProgress = true;
+      state.gameStartTime = Date.now();
+
+      internal.gameLoopUnsub = setInterval(() => {
+        // Game loop
+        // TODO: Implement game loop
+      }, 50);
+
+      console.info("Game started.");
     });
 
     socket.on("endGame", async () => {
-      // TODO: Implement
+      if (!socket.data.isAdmin) return;
+
+      state.gameInProgress = false;
+      state.gameStartTime = null;
+      console.info("Game ended.");
+    });
+
+    socket.on("addControlPoint", async (position) => {
+      if (!socket.data.isAdmin) return;
+
+      state.controlPoints.push(position);
+    });
+
+    socket.on("removeControlPoint", async (index) => {
+      if (!socket.data.isAdmin) return;
+
+      state.controlPoints.splice(index, 1);
+    });
+
+    socket.on("addRespawnPoint", async (position, team) => {
+      if (!socket.data.isAdmin) return;
+
+      state.respawnPoints.push({ position, team });
+    });
+
+    socket.on("removeRespawnPoint", async (index) => {
+      if (!socket.data.isAdmin) return;
+
+      state.respawnPoints.splice(index, 1);
     });
 
     socket.on("kickPlayer", async (playerName) => {
+      if (!socket.data.isAdmin) return;
       const player = popPlayer(playerName);
 
       const playerSocket = io.sockets.sockets.get(player.socketId);
@@ -35,6 +78,7 @@ export function initSocketServer() {
     });
 
     socket.on("assignTeam", async (playerName, team) => {
+      if (!socket.data.isAdmin) return;
       const player = state.players.find(
         (player) => player.playerName === playerName
       );
@@ -42,19 +86,16 @@ export function initSocketServer() {
     });
 
     socket.on("shoot", async () => {
-      // TODO: Do blip
-
       const shooter = state.players.find(
         (player) => player.socketId === socket.id
       );
 
-      // Wait for position updates
-      setTimeout(() => {
-        const target = findMostLikelyShot(shooter);
-        if (target) {
-          // TODO: Do hit
-        }
-      }, 500);
+      if (!shooter || shooter.health <= 0) return;
+
+      const target = findMostLikelyShot(shooter);
+      if (target) {
+        target.health = Math.max(0, target.health - 10);
+      }
     });
 
     socket.on("setPosAndHeading", async (playerName, position, heading) => {
