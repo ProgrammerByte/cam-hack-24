@@ -44,7 +44,9 @@ export function initSocketServer() {
     socket.on("shoot", async () => {
       // TODO: Do blip
 
-      const shooter = players.find((player) => player.socketId === socket.id);
+      const shooter = state.players.find(
+        (player) => player.socketId === socket.id
+      );
 
       // Wait for position updates
       setTimeout(() => {

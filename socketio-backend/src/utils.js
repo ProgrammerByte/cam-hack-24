@@ -28,7 +28,7 @@ export function findMostLikelyShot(shooter) {
 
   // Loop through each player to find the narrowest angle
   for (const player of enemies) {
-    if (player.playerName === shooterName) continue; // Skip the shooter
+    if (player.playerName === shooter.playerName) continue; // Skip the shooter
 
     const playerPos = player.position;
     const vectorToPlayer = getVector(shooterPos, playerPos);

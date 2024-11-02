@@ -8,7 +8,7 @@ const PORT = 8080;
 
 // Catch unhandled promise rejection errors
 process.on("unhandledRejection", (reason, promise) => {
-  console.error(`Unhandled Promise Rejection: ${reason} \n ${reason.stack}`);
+  console.error(`Unhandled Promise Rejection: ${reason}`);
 });
 
 const app = express();

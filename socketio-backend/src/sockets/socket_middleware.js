@@ -45,7 +45,7 @@ function generateFunnyName() {
 }
 
 export async function connectionMiddlewareRaw(socket, next) {
-  const auth = SocketAuth.parse(socket.handshake.auth);
+  const auth = socket.handshake.auth;
 
   let player;
 
@@ -56,21 +56,16 @@ export async function connectionMiddlewareRaw(socket, next) {
     );
 
     if (!player) {
-      throw new Error("REJOIN_FAILED", "Failed to rejoin room");
+      throw new Error("Failed to rejoin room");
     }
 
     player.connected = true;
     player.socketId = socket.id;
-
-    sessionId = auth.sessionId;
   } else {
     // Player joining for the first time
     player = {
       playerName: generateFunnyName(),
       sessionId: Math.random().toString(36).substring(2, 15),
-      team: null,
-      position: null,
-      heading: null,
       positionLastUpdated: Date.now(),
       connected: true,
       socketId: socket.id,
