@@ -16,9 +16,11 @@ function popPlayer(playerName) {
 export function initSocketServer() {
   io.use(connectionMiddleware);
 
-  io.on("connection", async (socket) => {
+  setInterval(() => {
     broadcastState();
+  }, 500);
 
+  io.on("connection", async (socket) => {
     socket.on("startGame", async () => {
       if (!socket.data.isAdmin || state.gameInProgress) return;
 
@@ -58,7 +60,6 @@ export function initSocketServer() {
       }, timeDelta * 1000);
 
       console.info("Game started.");
-      broadcastState();
     });
 
     socket.on("endGame", async () => {
@@ -69,35 +70,30 @@ export function initSocketServer() {
       console.info("Game ended.");
 
       clearInterval(internal.gameLoopInterval);
-      broadcastState();
     });
 
     socket.on("addControlPoint", async (position) => {
       if (!socket.data.isAdmin) return;
 
       state.controlPoints.push({ position });
-      broadcastState();
     });
 
     socket.on("removeControlPoint", async (index) => {
       if (!socket.data.isAdmin) return;
 
       state.controlPoints.splice(index, 1);
-      broadcastState();
     });
 
     socket.on("addRespawnPoint", async (position, team) => {
       if (!socket.data.isAdmin) return;
 
       state.respawnPoints.push({ position, team });
-      broadcastState();
     });
 
     socket.on("removeRespawnPoint", async (index) => {
       if (!socket.data.isAdmin) return;
 
       state.respawnPoints.splice(index, 1);
-      broadcastState();
     });
 
     socket.on("kickPlayer", async (playerName) => {
@@ -106,7 +102,6 @@ export function initSocketServer() {
 
       const playerSocket = io.sockets.sockets.get(player.socketId);
       playerSocket?.disconnect();
-      broadcastState();
     });
 
     socket.on("assignTeam", async (playerName, team) => {
@@ -115,7 +110,6 @@ export function initSocketServer() {
         (player) => player.playerName === playerName
       );
       player.team = team;
-      broadcastState();
     });
 
     socket.on("shoot", async () => {
@@ -129,7 +123,6 @@ export function initSocketServer() {
       if (target) {
         target.health = Math.max(0, target.health - 10);
       }
-      broadcastState();
     });
 
     socket.on("setPosAndHeading", async (playerName, position, heading) => {
@@ -139,7 +132,6 @@ export function initSocketServer() {
       player.position = position;
       player.heading = heading;
       player.positionLastUpdated = Date.now();
-      broadcastState();
     });
 
     socket.on("disconnect", async (reason) => {
@@ -169,7 +161,6 @@ export function initSocketServer() {
           console.info(`${playerName} lost connection.`);
         }
       }
-      broadcastState();
     });
   });
 }
