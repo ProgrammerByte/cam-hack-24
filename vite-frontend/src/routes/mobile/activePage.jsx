@@ -1,12 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import gunshotSound from "/gunshot.mp3";
 import useTone from "../../hooks/useTone";
 import useCheckEvents from "../../hooks/useCheckEvents";
+import { SocketContext } from "../context/socketContext";
 
 const ActivePage = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const gunshotAudio = new Audio(gunshotSound);
+  const socket = useContext(SocketContext);
   useCheckEvents();
 
   const playTone = useTone();
@@ -134,7 +136,7 @@ const ActivePage = () => {
     const hs = getHs(canvas);
 
     if (hs >= 30 && hs <= 60) {
-      // collision
+      socket.emit("shoot");
     }
 
     console.log(hs);

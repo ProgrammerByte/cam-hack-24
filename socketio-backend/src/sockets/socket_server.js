@@ -13,6 +13,15 @@ function popPlayer(playerName) {
   return player;
 }
 
+const placeholderFindMostLikelyShot = (shooter) => {
+  const enemies = state.players.filter(
+    (player) =>
+      player.team &&
+      player.team !== shooter.team
+  );
+  return enemies[Math.floor(Math.random()*enemies.length)];
+}
+
 export function initSocketServer() {
   // Blip loop
   setInterval(() => {
@@ -127,7 +136,8 @@ export function initSocketServer() {
 
       if (!shooter || shooter.health <= 0) return;
 
-      const target = findMostLikelyShot(shooter);
+      // const target = findMostLikelyShot(shooter);
+      const target = placeholderFindMostLikelyShot(shooter);
       if (target) {
         target.health = Math.max(0, target.health - 10);
       }
