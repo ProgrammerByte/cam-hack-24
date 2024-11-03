@@ -32,11 +32,19 @@ export const SocketProvider = ({ children }) => {
       s.on("sessionData", (data) => {
         setSession(data);
         s.auth = { ...(s.auth || {}), sessionId: data.sessionId };
-        localStorage.setItem("sessionId", data.sessionId || "");
+        if (data.sessionId) {
+          localStorage.setItem("sessionId", data.sessionId || "");
+        }
       });
       s.on("state", (state) => {
         setState(state);
       });
+
+      s.on("connect_error", (err) => console.error(err));
+      s.on("connect_failed", (err) => console.error(err));
+      s.on("disconnect", (err) => console.error(err));
+      s.on("error", (err) => console.error(err));
+
       setSocket(s);
     }
 
