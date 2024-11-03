@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import gunshotSound from "/src/assets/gunshot.mp3";
 import useTone from "../../hooks/useTone";
+import useCheckEvents from "../../hooks/useCheckEvents";
 
 const ActivePage = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const gunshotAudio = new Audio(gunshotSound);
+  useCheckEvents();
 
   const playTone = useTone();
 

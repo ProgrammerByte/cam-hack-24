@@ -2,12 +2,14 @@ import { useContext, useEffect, useState } from "react";
 import { SessionContext } from "../context/sessionContext";
 import { StateContext } from "../context/stateContext";
 import { useNavigate } from "react-router-dom";
+import useCheckEvents from "../../hooks/useCheckEvents";
 
 const WaitingPage = () => {
   const session = useContext(SessionContext);
   const state = useContext(StateContext);
   const [team, setTeam] = useState("unassigned");
   const navigate = useNavigate();
+  useCheckEvents();
 
   useEffect(() => {
     const newTeam =

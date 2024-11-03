@@ -8,6 +8,7 @@ import WaitingPage from "./routes/mobile/waitingPage";
 import DeathPage from "./routes/mobile/deathPage";
 import SetupPage from "./routes/mobile/setupPage";
 import { SocketProvider } from "./socketProvider";
+import RemovedPage from "./routes/mobile/removedPage";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/mobile/setup",
     element: <SetupPage />,
+  },
+  {
+    path: "/mobile/removed",
+    element: <RemovedPage />,
   },
 ]);
 

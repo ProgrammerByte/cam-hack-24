@@ -101,7 +101,8 @@ export function initSocketServer() {
       const player = popPlayer(playerName);
 
       const playerSocket = io.sockets.sockets.get(player.socketId);
-      playerSocket?.disconnect();
+      io.emit("playerKicked", playerName);
+      setTimeout(() => playerSocket?.disconnect(), 1000);
     });
 
     socket.on("assignTeam", async (playerName, team) => {

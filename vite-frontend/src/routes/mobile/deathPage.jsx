@@ -1,4 +1,7 @@
+import useCheckEvents from "../../hooks/useCheckEvents";
+
 const DeathPage = () => {
+  useCheckEvents();
   const team = "Scientists"; // scientist / soldier / unassigned
   const backgroundName =
     team === "Scientists" ? "scientistdeath.jpg" : "soldierdeath.png";
