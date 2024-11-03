@@ -122,7 +122,7 @@ const RoomPage = () => {
             <p>Created by: {roomInfo.createdBy}</p>
           </div>
           <h2 className="text-xl font-bold my-2 text-gray-800">
-            Join at: www.google.com
+            Join at: hlirl.fly.dev
           </h2>
         </div>
         <div>
