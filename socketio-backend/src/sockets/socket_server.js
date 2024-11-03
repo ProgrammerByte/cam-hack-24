@@ -88,6 +88,14 @@ export function initSocketServer() {
       clearInterval(internal.gameLoopInterval);
     });
 
+    socket.on("scientistPoint", async () => {
+      state.scores["Scientists"] += 1;
+    })
+
+    socket.on("soldierPoint", async () => {
+      state.scores["Marine Corps"] += 1;
+    })
+
     socket.on("addControlPoint", async (position) => {
       if (!socket.data.isAdmin) return;
 
@@ -145,6 +153,33 @@ export function initSocketServer() {
           socket.emit("kill", shooter.playerName, target.playerName);
         }
       }
+    });
+
+    socket.on("healPlayer", async (playerName) => {
+      const player = state.players.find(
+        (player) => player.playerName === playerName
+      );
+
+      if (!player || player.healing || player.health > 0) {
+        return;
+      }
+
+      player.healing = true;
+
+      const targetHealth = 100; // Target health after healing
+      const healingDuration = 5000; // Duration in ms over which to heal
+      const increment = 5; // Amount to increment each step
+      const intervalTime = healingDuration / (targetHealth / increment); 
+    
+      const healInterval = setInterval(() => {
+        if (player.health >= targetHealth) {
+          player.health = targetHealth;
+          player.healing = false;
+          clearInterval(healInterval);
+        } else {
+          player.health += increment;
+        }
+      }, intervalTime);
     });
 
     socket.on("setPosAndHeading", async (playerName, position, heading) => {

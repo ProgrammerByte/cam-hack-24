@@ -10,6 +10,8 @@ import SetupPage from "./routes/mobile/setupPage";
 import { SocketProvider } from "./socketProvider";
 import RemovedPage from "./routes/mobile/removedPage";
 import FinishedPage from "./routes/mobile/finishedPage";
+import StationPage from "./routes/desktop/stationPage";
+import SoldierStationPage from "./routes/desktop/soldierStationPage";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
   {
     path: "/desktop/room",
     element: <RoomPage />,
+  },
+  {
+    path: "/desktop/station",
+    element: <StationPage />,
+  },
+  {
+    path: "/desktop/soldierstation",
+    element: <SoldierStationPage />,
   },
   {
     path: "/mobile/active",

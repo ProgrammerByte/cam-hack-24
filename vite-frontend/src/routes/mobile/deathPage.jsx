@@ -1,10 +1,55 @@
+import { useContext, useEffect, useState } from "react";
 import useCheckEvents from "../../hooks/useCheckEvents";
+import { StateContext } from "../context/stateContext";
+import { useNavigate } from "react-router-dom";
+import chargingSound from "/charginghealth.mp3";
+import { SessionContext } from "../context/sessionContext";
 
 const DeathPage = () => {
   useCheckEvents();
-  const team = "Scientists"; // scientist / soldier / unassigned
+  const navigate = useNavigate();
+  const state = useContext(StateContext);
+  const session = useContext(SessionContext);
+  const player = state?.players?.filter(
+    (p) => p.playerName === session.playerName
+  )?.[0];
   const backgroundName =
-    team === "Scientists" ? "scientistdeath.jpg" : "soldierdeath.png";
+    player?.team === "Scientists" ? "scientistdeath.jpg" : "soldierdeath.png";
+  const [originalHealth, setOriginalHealth] = useState(null);
+  const [playingSound, setPlayingSound] = useState(false);
+  const chargingAudio = new Audio(chargingSound);
+
+  useEffect(() => {
+    if (originalHealth === null && player) {
+      setOriginalHealth(player?.health);
+    }
+  }, [player]);
+
+  useEffect(() => {
+    const player1 = state?.players?.filter(
+      (p) => p.playerName === session.playerName
+    )?.[0];
+    if (player1) {
+      if (player1?.health >= 100) {
+        chargingSound.pause();
+        chargingSound.currentTime = 0;
+        navigate("/mobile/active");
+      }
+      if (
+        !playingSound &&
+        originalHealth !== null &&
+        player1.health > originalHealth
+      ) {
+        setPlayingSound(true);
+        console.log("playingSound");
+        chargingAudio.play();
+      }
+    }
+  }, [state]);
+
+  if (!player) {
+    return null;
+  }
 
   return (
     <div
