@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { SocketContext } from "../context/socketContext";
 import StationPlayerButton from "../../components/stationPlayerButton";
+import { StateContext } from "../context/stateContext";
 
 const StationPage = () => {
   const [users, setUsers] = useState([]);
@@ -10,6 +11,11 @@ const StationPage = () => {
   const soldiers = users.filter((user) => user.team === "Marine Corps");
 
   const socket = useContext(SocketContext);
+  const state = useContext(StateContext);
+
+  const scores = state?.scores || {};
+  const scientistScore = scores?.Scientists;
+  const soldierScore = scores?.["Marine Corps"];
 
   const soldierPoint = () => {
     setCoolingDown(true);
@@ -19,7 +25,7 @@ const StationPage = () => {
 
   socket.on("state", (state) => {
     console.log("state", state);
-    setUsers(state.players);
+    setUsers(state?.players);
   });
 
   return (
@@ -34,7 +40,7 @@ const StationPage = () => {
       <div className="w-1/2 mr-4 space-y-4 z-10">
         <div className="relative bg-white bg-opacity-50 shadow-lg rounded-lg p-4 h-full">
           <h2 className="text-lg font-semibold mb-4 text-gray-800">
-            Scientists
+            Scientists - {scientistScore}
           </h2>
           <ul className="space-y-3">
             {scientists.map((user) => (
@@ -51,7 +57,7 @@ const StationPage = () => {
         <div className="relative bg-white bg-opacity-50 shadow-lg rounded-lg p-4 h-full flex flex-col justify-between">
           <div>
             <h2 className="text-lg font-semibold mb-4 text-gray-800">
-              Marine Corps
+              Marine Corps - {soldierScore}
             </h2>
             <ul className="space-y-3">
               {soldiers.map((user) => (
