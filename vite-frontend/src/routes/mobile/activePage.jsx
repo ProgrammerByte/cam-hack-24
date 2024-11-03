@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import gunshotSound from "/src/assets/gunshot.mp3";
+import gunshotSound from "/gunshot.mp3";
 import useTone from "../../hooks/useTone";
 import useCheckEvents from "../../hooks/useCheckEvents";
 
@@ -154,7 +154,7 @@ const ActivePage = () => {
       <canvas ref={canvasRef} className="hidden" />{" "}
       {/* Crosshair SVG positioned at the center */}
       <img
-        src="/src/assets/crosshair.svg"
+        src="/crosshair.svg"
         alt="Crosshair"
         className="absolute inset-0 m-auto w-16 h-16 pointer-events-none"
         style={{

@@ -10,7 +10,7 @@ const DeathPage = () => {
     <div
       className="items-center justify-center h-screen"
       style={{
-        backgroundImage: `url(/src/assets/${backgroundName})`,
+        backgroundImage: `url(/${backgroundName})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

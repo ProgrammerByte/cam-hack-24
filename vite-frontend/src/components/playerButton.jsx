@@ -24,7 +24,7 @@ const PlayerButton = ({ user }) => {
     >
       <span>{user.playerName}</span>
       <div className="flex space-x-1">
-        {!user.connected && <img src="/src/assets/disconnected.svg" />}
+        {!user.connected && <img src="/disconnected.svg" />}
         <button
           className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold py-1 px-2 rounded"
           onClick={assignToScienceTeam}

@@ -4,7 +4,8 @@ import { SocketContext } from "./routes/context/socketContext";
 import { SessionContext } from "./routes/context/sessionContext";
 import { StateContext } from "./routes/context/stateContext";
 
-const SOCKET_SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const SOCKET_SERVER_URL =
+  import.meta.env.VITE_SERVER_URL || "https://hlirl-backend.fly.dev/";
 
 // eslint-disable-next-line react/prop-types
 export const SocketProvider = ({ children }) => {

@@ -37,7 +37,7 @@ const RoomPage = () => {
     <div
       className="flex h-screen bg-gray-100 p-4"
       style={{
-        backgroundImage: "url(/src/assets/desktopbackground.png)",
+        backgroundImage: "url(/desktopbackground.png)",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -53,7 +53,7 @@ const RoomPage = () => {
             ))}
           </ul>
           <img
-            src="/src/assets/scientistpose.png"
+            src="/scientistpose.png"
             alt="Decorative Image"
             className="absolute object-contain"
             style={{
@@ -75,7 +75,7 @@ const RoomPage = () => {
             ))}
           </ul>
           <img
-            src="/src/assets/soldierpose.png"
+            src="/soldierpose.png"
             alt="Decorative Image"
             className="absolute object-contain"
             style={{
@@ -97,7 +97,7 @@ const RoomPage = () => {
             ))}
           </ul>
           <img
-            src="/src/assets/scientistpose.png"
+            src="/scientistpose.png"
             alt="Decorative Image"
             className="absolute object-contain"
             style={{
