@@ -82,6 +82,10 @@ export function initSocketServer() {
 
       state.gameInProgress = false;
       state.gameStartTime = null;
+      state.scores = {
+        ["Scientists"]: 0,
+        ["Marine Corps"]: 0,
+      };
       console.info("Game ended.");
       io.emit("gameEnded");
 
