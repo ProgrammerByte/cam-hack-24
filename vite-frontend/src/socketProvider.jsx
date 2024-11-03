@@ -4,7 +4,7 @@ import { SocketContext } from "./routes/context/socketContext";
 import { SessionContext } from "./routes/context/sessionContext";
 import { StateContext } from "./routes/context/stateContext";
 
-const SOCKET_SERVER_URL = "http://localhost:8080"; // Change this to your server URL
+const SOCKET_SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 // eslint-disable-next-line react/prop-types
 export const SocketProvider = ({ children }) => {
