@@ -61,16 +61,15 @@ const StationPage = () => {
           </div>
           {/* Button positioned at the bottom */}
           <div className="mt-4">
-            <button
-              className="bg-blue-500 text-white rounded-lg p-2 w-full py-10 text-7xl hover:bg-blue-600 transition duration-200"
-              onClick={soldierPoint}
-              disabled={
-                coolingDown ||
-                !soldiers?.filter((user) => user.health >= 0)?.length
-              }
-            >
-              Claim score
-            </button>
+            {!coolingDown &&
+            soldiers?.filter((user) => user.health >= 0)?.length ? (
+              <button
+                className="bg-blue-500 text-white rounded-lg p-2 w-full py-10 text-7xl hover:bg-blue-600 transition duration-200"
+                onClick={soldierPoint}
+              >
+                Claim score
+              </button>
+            ) : null}
           </div>
         </div>
       </div>

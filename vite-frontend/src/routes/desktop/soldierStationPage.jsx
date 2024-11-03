@@ -31,7 +31,7 @@ const SoldierStationPage = () => {
         backgroundPosition: "center",
       }}
     >
-      <div className="w-1/2 flex-1 flex flex-col justify-between">
+      <div className="w-1/2 flex-1 flex flex-col justify-between mr-4">
         <div className="relative bg-white bg-opacity-50 shadow-lg rounded-lg p-4 h-full flex flex-col justify-between">
           <div>
             <h2 className="text-lg font-semibold mb-4 text-gray-800">
@@ -45,20 +45,19 @@ const SoldierStationPage = () => {
           </div>
           {/* Button positioned at the bottom */}
           <div className="mt-4">
-            <button
-              className="bg-blue-500 text-white rounded-lg p-2 w-full py-10 text-7xl hover:bg-blue-600 transition duration-200"
-              onClick={scientistPoint}
-              disabled={
-                coolingDown ||
-                !scientists?.filter((user) => user.health >= 0)?.length
-              }
-            >
-              Claim score
-            </button>
+            {!coolingDown &&
+            scientists?.filter((user) => user.health >= 0)?.length ? (
+              <button
+                className="bg-blue-500 text-white rounded-lg p-2 w-full py-10 text-7xl hover:bg-blue-600 transition duration-200"
+                onClick={scientistPoint}
+              >
+                Claim score
+              </button>
+            ) : null}
           </div>
         </div>
       </div>
-      <div className="w-1/2 mr-4 space-y-4 z-10">
+      <div className="w-1/2 space-y-4 z-10">
         <div className="relative bg-white bg-opacity-50 shadow-lg rounded-lg p-4 h-full">
           <h2 className="text-lg font-semibold mb-4 text-gray-800">
             Marine Corps
