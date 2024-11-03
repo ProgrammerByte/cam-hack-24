@@ -20,6 +20,7 @@ export const SocketProvider = ({ children }) => {
           auth: {
             token: "beans",
           },
+          transports: ["websocket"],
         });
       } else {
         const sid = localStorage.getItem("sessionId");
@@ -27,6 +28,7 @@ export const SocketProvider = ({ children }) => {
           auth: sid && {
             sessionId: sid,
           },
+          transports: ["websocket"],
         });
       }
       s.on("sessionData", (data) => {
