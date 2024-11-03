@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Frequency Detection</title>
+</head>
+<body>
+<h1>Frequency Detection</h1>
+<h2 id="frequency">Listening for 5000 Hz...</h2>
+<button onclick="startFrequencyDetection()">Start Detection</button>
+
+<script>
+    let audioCtx;
+    let analyser;
+    let filter;
+    let microphone;
+    const targetFrequency = 5000; // Target frequency in Hz
+    const tolerance = 200; // Bandwidth tolerance in Hz
+    const threshold = -50; // Sensitivity threshold
+
+    async function startFrequencyDetection() {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 2048;
+
+        // Create a band-pass filter centered on the target frequency
+        filter = audioCtx.createBiquadFilter();
+        filter.type = "bandpass";
+        filter.frequency.value = targetFrequency;
+        filter.Q = targetFrequency / tolerance;
+
+        // Get the user's microphone
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        microphone = audioCtx.createMediaStreamSource(stream);
+        microphone.connect(filter);
+        filter.connect(analyser);
+
+        // Listen for the frequency in the band-pass output
+        detectFrequency();
+    }
+
+    function detectFrequency() {
+        const buffer = new Float32Array(analyser.frequencyBinCount);
+
+        setInterval(() => {
+            analyser.getFloatFrequencyData(buffer);
+
+            // Get the level at the target frequency's bin
+            const targetIndex = Math.round(targetFrequency / (audioCtx.sampleRate / analyser.fftSize));
+            const level = buffer[targetIndex];
+
+            // Check if the level exceeds the threshold, indicating sound at the target frequency
+            console.log("level", level);
+            if (level > threshold) {
+                document.getElementById("frequency").innerText = `Detected ${targetFrequency} Hz! Level: ${level.toFixed(2)}`;
+                console.log("Frequency detected:", targetFrequency);
+            } else {
+                document.getElementById("frequency").innerText = "Listening for 5000 Hz...";
+            }
+        }, 10); // Check every 100 ms
+    }
+</script>
+</body>
+</html>
