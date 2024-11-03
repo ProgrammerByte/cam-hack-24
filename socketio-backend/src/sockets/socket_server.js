@@ -160,7 +160,7 @@ export function initSocketServer() {
         (player) => player.playerName === playerName
       );
 
-      if (!player || player.healing || player.health > 0) {
+      if (!player || player.healing) {
         return;
       }
 
