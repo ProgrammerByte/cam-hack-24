@@ -14,6 +14,12 @@ function popPlayer(playerName) {
 }
 
 export function initSocketServer() {
+  // Blip loop
+  setInterval(() => {
+    // TODO: Do blip
+    io.emit("blip");
+  }, 500);
+
   io.use(connectionMiddleware);
 
   setInterval(() => {
