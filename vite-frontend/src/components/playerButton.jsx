@@ -29,19 +29,19 @@ const PlayerButton = ({ user }) => {
           className="bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold py-1 px-2 rounded"
           onClick={assignToScienceTeam}
         >
-          B1
+          S
         </button>
         <button
           className="bg-green-500 hover:bg-green-600 text-white text-xs font-semibold py-1 px-2 rounded"
           onClick={assignToMarineCorps}
         >
-          B2
+          M
         </button>
         <button
           className="bg-red-500 hover:bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded"
           onClick={kickPlayer}
         >
-          B3
+          X
         </button>
       </div>
     </li>

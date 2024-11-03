@@ -139,7 +139,11 @@ export function initSocketServer() {
       // const target = findMostLikelyShot(shooter);
       const target = placeholderFindMostLikelyShot(shooter);
       if (target) {
+        socket.emit("hit", shooter.playerName);
         target.health = Math.max(0, target.health - 10);
+        if (target.health <= 0) {
+          socket.emit("kill", shooter.playerName, target.playerName);
+        }
       }
     });
 

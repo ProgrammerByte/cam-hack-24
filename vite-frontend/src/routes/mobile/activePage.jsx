@@ -1,21 +1,44 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import gunshotSound from "/gunshot.mp3";
-import useTone from "../../hooks/useTone";
 import useCheckEvents from "../../hooks/useCheckEvents";
 import { SocketContext } from "../context/socketContext";
+import { StateContext } from "../context/stateContext";
+import HealthBar from "../../components/healthBar";
+import { SessionContext } from "../context/sessionContext";
+import { useNavigate } from "react-router-dom";
 
 const ActivePage = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const gunshotAudio = new Audio(gunshotSound);
   const socket = useContext(SocketContext);
+  const state = useContext(StateContext);
+  const session = useContext(SessionContext);
+  const player = state?.players?.filter(
+    (p) => p.playerName === session.playerName
+  )?.[0];
   useCheckEvents();
+  const navigate = useNavigate();
+  const [showHit, setShowHit] = useState(false);
+  const [killMessages, setShowKillMessages] = useState([]);
 
-  const playTone = useTone();
+  socket.on("hit", (shooterName) => {
+    if (showHit && player?.playerName && shooterName === player.playerName) {
+      setShowHit(true);
+      setTimeout(() => {
+        setShowHit(false);
+      }, 100);
+    }
+  });
 
-  const playBlip = () => {
-    playTone(18000, 300);
-  };
+  socket.on("kill", (shooterName, targetName) => {
+    if (killMessages.length < 4) {
+      setShowKillMessages([...killMessages, `${targetName} 🔫 ${shooterName}`]);
+      setTimeout(() => {
+        killMessages.shift();
+      }, 3000);
+    }
+  });
 
   const playGunshotSound = () => {
     gunshotAudio.currentTime = 0; // Reset to start in case it was already playing
@@ -50,6 +73,13 @@ const ActivePage = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    console.log("player", player);
+    if (player && player?.health <= 0) {
+      navigate("/mobile/death");
+    }
+  }, [player]);
 
   function rgb2hsv(r, g, b) {
     // let s, percentRoundFn;
@@ -164,16 +194,30 @@ const ActivePage = () => {
             "invert(82%) sepia(97%) saturate(7492%) hue-rotate(333deg) brightness(100%) contrast(102%)",
         }}
       />
+      {showHit ? (
+        <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-9xl text-white pointer-events-none">
+          X
+        </span>
+      ) : null}
+      <HealthBar health={player?.health} maxHealth={100} />
       <button
         onClick={() => {
           playGunshotSound();
-          playBlip();
           captureFrame();
         }}
         className="absolute bottom-0 bg-blue-500 text-white rounded-lg px-4 py-2"
       >
         SHOOT
       </button>
+      <div className="absolute top-7 right-0 bg-gray-800 bg-opacity-75 p-4 rounded-lg w-full max-h-60 overflow-y-auto shadow-lg">
+        <ul className="space-y-1">
+          {killMessages.map((message) => (
+            <li key={message} className="text-gray-300 text-sm">
+              {message}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
