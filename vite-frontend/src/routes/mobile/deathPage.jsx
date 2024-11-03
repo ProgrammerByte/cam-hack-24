@@ -31,8 +31,11 @@ const DeathPage = () => {
     )?.[0];
     if (player1) {
       if (player1?.health >= 100) {
-        chargingSound.pause();
-        chargingSound.currentTime = 0;
+        if (chargingSound && typeof chargingSound.pause === "function") {
+          chargingSound.pause();
+          chargingSound.currentTime = 0;
+          chargingSound.src = "";
+        }
         navigate("/mobile/active");
       }
       if (
