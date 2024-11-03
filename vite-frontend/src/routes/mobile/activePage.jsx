@@ -131,7 +131,7 @@ const ActivePage = () => {
 
     const hs = getHs(canvas);
 
-    if (hs >= 50 && hs <= 80) {
+    if (hs >= 30 && hs <= 60) {
       // collision
     }
 
