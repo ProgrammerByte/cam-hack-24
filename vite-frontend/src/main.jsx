@@ -9,6 +9,7 @@ import DeathPage from "./routes/mobile/deathPage";
 import SetupPage from "./routes/mobile/setupPage";
 import { SocketProvider } from "./socketProvider";
 import RemovedPage from "./routes/mobile/removedPage";
+import FinishedPage from "./routes/mobile/finishedPage";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
   {
     path: "/mobile/removed",
     element: <RemovedPage />,
+  },
+  {
+    path: "/mobile/finish",
+    element: <FinishedPage />,
   },
 ]);
 

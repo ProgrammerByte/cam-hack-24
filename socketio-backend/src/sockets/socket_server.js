@@ -68,6 +68,7 @@ export function initSocketServer() {
       state.gameInProgress = false;
       state.gameStartTime = null;
       console.info("Game ended.");
+      io.emit("gameEnded");
 
       clearInterval(internal.gameLoopInterval);
     });

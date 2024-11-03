@@ -24,6 +24,10 @@ const RoomPage = () => {
     socket.emit("startGame");
   };
 
+  const endGame = () => {
+    socket.emit("endGame");
+  };
+
   socket.on("state", (state) => {
     console.log("state", state);
     setUsers(state.players);
@@ -127,6 +131,12 @@ const RoomPage = () => {
             onClick={startGame}
           >
             Begin Match
+          </button>
+          <button
+            className="bg-red-500 text-white rounded-lg p-2 ml-4 mt-4 hover:bg-red-600 transition duration-200"
+            onClick={endGame}
+          >
+            End Match
           </button>
         </div>
       </div>

@@ -13,6 +13,9 @@ const useCheckEvents = () => {
       navigate("/mobile/removed");
     }
   });
+  socket.on("gameEnded", async () => {
+    navigate("/mobile/finish");
+  });
 };
 
 export default useCheckEvents;
